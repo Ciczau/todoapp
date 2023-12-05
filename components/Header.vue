@@ -4,7 +4,12 @@
     <div class="show-menu-button" @click="handleMenu()">></div>
     <div>To Do</div>
     <button @click="handleModal" class="new-task-button">New task</button>
-    <NewTaskModal v-if="isModalVisible" :user="user" />
+    <NewTaskModal
+      v-if="isModalVisible"
+      :user="user"
+      :isModalVisible="this.isModalVisible"
+      @isModalVisible="handleModalClose"
+    />
   </header>
 </template>
 
@@ -13,18 +18,19 @@ export default {
   data() {
     return {
       isOpened: false,
+      isModalVisible: false,
     };
   },
-  setup() {
-    const isModalVisible = ref(false);
-    function handleModal() {
-      isModalVisible.value = true;
-    }
-    return { isModalVisible, handleModal };
-  },
+
   methods: {
     handleMenu() {
       this.isOpened = !this.isOpened;
+    },
+    handleModal() {
+      this.isModalVisible = true;
+    },
+    handleModalClose() {
+      this.isModalVisible = false;
     },
   },
   props: {

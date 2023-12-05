@@ -1,6 +1,3 @@
-import type { set } from 'nuxt/dist/app/compat/capi'; import type { set } from
-'nuxt/dist/app/compat/capi'; import type { set } from
-'nuxt/dist/app/compat/capi';
 <template>
   <form class="loginregister-form" @submit="onSubmit">
     <div class="title" v-if="type === 'login'">Log onto your account!</div>

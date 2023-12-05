@@ -1,14 +1,13 @@
 <template>
   <div class="wrapper">
-    <Header :user="userStore.user" />
-    <TaskManager :user="userStore.user" />
+    <div v-if="userStore.user !== null">{{ userStore.user.email }}</div>
+    <div></div>
   </div>
 </template>
 
 <script>
-import Cookies from "js-cookie";
-import VueJwtDecode from "vue-jwt-decode";
-import { useUser } from "~/server/api/users";
+import { useUser } from "../server/api/users";
+
 export default {
   computed: {
     userStore() {
@@ -27,7 +26,7 @@ export default {
   width: 100vw;
 
   min-height: 100vh;
-  background-color: rgb(5, 5, 26);
+  background-color: rgb(94, 94, 107);
   display: flex;
   color: white;
   flex-direction: column;

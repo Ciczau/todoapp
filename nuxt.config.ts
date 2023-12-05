@@ -1,7 +1,7 @@
 export default {
   buildModules: ["@nuxt/typescript-build"],
   css: ["@/globals/globals.css"],
-
+  modules: ["@pinia/nuxt"],
   axios: {
     baseURL: "http://localhost:5000",
   },

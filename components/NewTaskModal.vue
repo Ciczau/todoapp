@@ -1,5 +1,6 @@
 <template>
   <div class="modal-wrapper">
+    <div class="modal-background" @click="closeModal" />
     <form class="modal" @submit="onSubmit">
       <input
         class="input"
@@ -24,6 +25,18 @@
         :ref="date.ref"
       />
       <p v-if="date.error" class="error">{{ date.error.message }}</p>
+      <p>Choose priority:</p>
+      <select
+        class="priority-select"
+        :ref="priority.ref"
+        v-model="priority.value"
+      >
+        <option value="" selected disabled hidden>Choose option</option>
+        <option value="1">High priority</option>
+        <option value="2">Low Priority</option>
+        <option value="3">No priority</option>
+      </select>
+      <p v-if="priority.error" class="error">{{ priority.error.message }}</p>
       <input type="submit" value="Add new task" class="addtask-button" />
     </form>
   </div>
@@ -45,10 +58,11 @@ export default {
     const date = useField("date", {
       rule: { required: true, message: "Field required" },
     });
-
+    const priority = useField("priority", {
+      rule: { required: true, message: "Priority required" },
+    });
     async function onSubmit(data) {
       try {
-        console.log(date);
         const res = await fetch("http://localhost:5000/api/task/add", {
           method: "POST",
           headers: {
@@ -59,10 +73,10 @@ export default {
             title: data.title,
             description: data.description,
             date: data.date,
+            priority: Number(data.priority),
           }),
         });
         const resData = await res.json();
-        console.log(resData);
         if (resData.success) {
           location.reload();
         }
@@ -70,10 +84,24 @@ export default {
         console.log(err);
       }
     }
-    return { onSubmit: handleSubmit(onSubmit), title, description, date };
+
+    return {
+      onSubmit: handleSubmit(onSubmit),
+      title,
+      description,
+      date,
+      priority,
+    };
+  },
+
+  methods: {
+    closeModal() {
+      this.$emit("isModalVisible", false);
+    },
   },
   props: {
     user: { email: String, nick: String },
+    isModalVisible: true,
   },
 };
 </script>
@@ -89,6 +117,17 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.modal-background {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: rgba(0, 0, 0, 0.459);
 }
 .modal {
@@ -97,6 +136,8 @@ export default {
   padding: 15px;
   width: 600px;
   display: flex;
+  position: relative;
+  z-index: 2;
   flex-direction: column;
   align-items: center;
 }
@@ -120,5 +161,12 @@ export default {
 .error {
   color: red;
   font-size: 12px;
+}
+.priority-select {
+  border: 0;
+  outline: 0;
+  padding: 5px;
+  margin: 15px 0;
+  border-radius: 5px;
 }
 </style>
