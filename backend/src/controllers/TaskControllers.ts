@@ -46,6 +46,14 @@ export const checkTask = async (req, res) => {
 export const getSingleTask = async (req, res) => {
   const { taskId } = req.body;
   if (!taskId) return res.json({ success: false });
+
+  function isValidObjectId(id) {
+    return (
+      typeof id === "string" &&
+      (id.length === 12 || (id.length === 24 && /^[0-9a-fA-F]+$/.test(id)))
+    );
+  }
+  if (!isValidObjectId(taskId)) return res.json({ success: false });
   const _id = new ObjectId(taskId);
   const task = await tasks.findOne({ _id: _id });
   return res.json({ success: true, task: task });
