@@ -53,37 +53,22 @@
         Done
       </button>
     </div>
-    <div class="task" v-for="task in tasks" v-bind:key="task">
-      <div class="check-wrapper">
-        <SvgIcon
-          class="check-icon"
-          v-if="task.checked"
-          @click="checkTask(task)"
-          type="mdi"
-          :path="checkedIcon"
-        />
-        <SvgIcon
-          class="check-icon"
-          v-else
-          @click="checkTask(task)"
-          type="mdi"
-          :path="uncheckedIcon"
-        />
-      </div>
-      <div class="title">
-        {{ task.title }}
-      </div>
-      <div class="description">{{ task.description }}</div>
-      <div class="date">{{ this.formatData(task.date) }}</div>
+    <div v-if="tasks.length !== 0">
+      <Task
+        v-for="task in tasks"
+        v-bind:key="task"
+        :task="task"
+        :getTasks="getTasks"
+        @getTasks="getTasks"
+      />
     </div>
   </div>
+
   <div v-else class="warning">You are not logged in</div>
 </template>
 
 <script>
 import Cookies from "js-cookie";
-import SvgIcon from "@jamescoyle/vue-icon";
-import { mdiCheckCircleOutline, mdiCheckCircle } from "@mdi/js";
 
 export default {
   data() {
@@ -91,15 +76,13 @@ export default {
       tasks: [],
       choosenPriorityFilter: 0,
       choosenExecutionFilter: 0,
-      uncheckedIcon: mdiCheckCircleOutline,
-      checkedIcon: mdiCheckCircle,
     };
   },
-  components: {
-    SvgIcon,
-  },
   methods: {
-    async getTasks(priorityFilterId, executionFilterId) {
+    async getTasks(
+      priorityFilterId = this.choosenPriorityFilter,
+      executionFilterId = this.choosenExecutionFilter
+    ) {
       try {
         const res = await fetch("http://localhost:5000/api/tasks/get", {
           method: "POST",
@@ -116,24 +99,6 @@ export default {
         if (resData.success) {
           this.tasks = resData.tasks;
         }
-      } catch (err) {}
-    },
-    formatData(taskDate) {
-      const date = new Date(taskDate);
-      const options = { year: "numeric", month: "long", day: "numeric" };
-      const formattedDate = date.toLocaleDateString("pl-PL", options);
-      return formattedDate;
-    },
-    async checkTask(task) {
-      try {
-        const res = await fetch("http://localhost:5000/api/task/check", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ taskId: task._id, checked: task.checked }),
-        });
-        this.getTasks(this.choosenPriorityFilter, this.choosenExecutionFilter);
       } catch (err) {}
     },
     checkUser() {
