@@ -16,12 +16,12 @@
         :path="uncheckedIcon"
       />
     </div>
-    <div class="header-info" v-if="task.nick === user.nick">
-      You are in editing mode
-    </div>
-    <div class="header-info" v-else>You are only in view mode.</div>
-    <div class="username" v-if="taskmode === 'singletask'">
-      {{ user.nick }} task's
+    <div v-if="taskmode === 'singletask'">
+      <div class="header-info" v-if="task.nick === user.nick">
+        You are in editing mode
+      </div>
+      <div class="header-info" v-else>You are only in view mode.</div>
+      <div class="username">{{ user.nick }} task's</div>
     </div>
     <div class="title">
       {{ task.title }}
