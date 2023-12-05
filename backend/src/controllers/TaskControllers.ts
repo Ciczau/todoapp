@@ -42,3 +42,11 @@ export const checkTask = async (req, res) => {
   await tasks.updateOne({ _id: _id }, { $set: { checked: !checked } });
   return res.json({ success: true });
 };
+
+export const getSingleTask = async (req, res) => {
+  const { taskId } = req.body;
+  if (!taskId) return res.json({ success: false });
+  const _id = new ObjectId(taskId);
+  const task = await tasks.findOne({ _id: _id });
+  return res.json({ success: true, task: task });
+};

@@ -5,6 +5,7 @@ import { Login, Register, refreshToken } from "./controllers/UserControllers";
 import {
   AddTask,
   checkTask,
+  getSingleTask,
   getUserTasks,
 } from "./controllers/TaskControllers";
 
@@ -17,3 +18,4 @@ router.post("/api/token", refreshToken);
 router.post("/api/task/add", AddTask);
 router.post("/api/tasks/get", getUserTasks);
 router.post("/api/task/check", checkTask);
+router.post("/api/task/get", getSingleTask);
