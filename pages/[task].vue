@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div v-if="task.success">
+    <div v-if="task && task.success">
       <Task :task="task.task" :taskmode="'singletask'" :user="userStore.user" />
     </div>
     <div v-else>This task does not exists</div>
